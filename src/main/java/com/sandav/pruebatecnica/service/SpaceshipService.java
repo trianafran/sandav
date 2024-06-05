@@ -1,0 +1,17 @@
+package com.sandav.pruebatecnica.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.sandav.pruebatecnica.valueObject.Spaceship;
+
+@Service
+public interface SpaceshipService {
+	public List<Spaceship>findAll(Integer page, Integer size);
+	public List<Spaceship>findByNameContains(String name);
+	public Spaceship create(Spaceship spaceship);
+	public Spaceship update(Spaceship spaceship);
+	public void delete(Long id);
+	public Spaceship findById();
+}
