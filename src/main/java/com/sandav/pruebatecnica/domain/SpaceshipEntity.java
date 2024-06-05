@@ -1,4 +1,4 @@
-package com.sandav.pruebatecnica;
+package com.sandav.pruebatecnica.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
