@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sandav.pruebatecnica.dto.SpaceshipCreateDto;
 import com.sandav.pruebatecnica.dto.SpaceshipDto;
 import com.sandav.pruebatecnica.service.SpaceshipService;
 import com.sandav.pruebatecnica.util.mappings.SpaceshipMapper;
@@ -45,8 +46,8 @@ public class SpaceshipController {
 	
 	@Operation(summary = "Create a spaceship")
 	@PostMapping("/")
-	SpaceshipDto create(@RequestBody SpaceshipDto spaceshipDto) {
-		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.create(spaceshipMapper.spaceshipDtoToSpaceship(spaceshipDto)));
+	SpaceshipDto create(@RequestBody SpaceshipCreateDto spaceshipDto) {
+		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.create(spaceshipMapper.spaceshipCreateDtoToSpaceship(spaceshipDto)));
 	}
 	
 	@Operation(summary = "Upgrade a spaceship entirely")
