@@ -13,5 +13,5 @@ public interface SpaceshipService {
 	public Spaceship create(Spaceship spaceship);
 	public Spaceship update(Spaceship spaceship);
 	public void delete(Long id);
-	public Spaceship findById();
+	public Spaceship findById(Long id);
 }
