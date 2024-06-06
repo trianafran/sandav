@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.sandav.pruebatecnica.repository.custom.SpaceshipRepositoryCustom;
 import com.sandav.pruebatecnica.service.SpaceshipService;
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 
+@Service
 public class SpaceshipServiceImpl implements SpaceshipService {
 	
 	@Autowired

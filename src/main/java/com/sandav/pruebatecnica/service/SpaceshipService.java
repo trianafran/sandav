@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 
-@Service
+
 public interface SpaceshipService {
 	public List<Spaceship>findAll(Integer page, Integer size);
 	public List<Spaceship>findByNameContains(String name);

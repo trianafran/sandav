@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.sandav.pruebatecnica.domain.SpaceshipEntity;
 import com.sandav.pruebatecnica.repository.SpaceshipRepository;
@@ -12,6 +13,7 @@ import com.sandav.pruebatecnica.repository.custom.SpaceshipRepositoryCustom;
 import com.sandav.pruebatecnica.util.mappings.SpaceshipMapper;
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 
+@Repository
 public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 	
 	@Autowired
@@ -33,14 +35,14 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 
 	@Override
 	public Spaceship create(Spaceship spaceship) {
-		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipentity(spaceship);
+		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipEntity(spaceship);
 		spaceshipRepository.save(spaceshipEntity);
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipEntity);
 	}
 
 	@Override
 	public Spaceship update(Spaceship spaceship) {
-		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipentity(spaceship);
+		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipEntity(spaceship);
 		spaceshipRepository.save(spaceshipEntity);
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipEntity);
 	}
