@@ -19,17 +19,4 @@ public class ValidationAspect {
 	    	logger.warn(String.format("Method: %s. Id must not be negative.", point.getSignature().toString()));
 	    }
 	}
-	
-//	@Around("execution(* com.arquitecturajava.servicios.*.*())")
-//	public void tiempoPasado(ProceedingJoinPoint punto) throws Throwable {
-//	 
-//	Long tiempo1 = System.currentTimeMillis();
-//	punto.proceed();
-//	Long tiempo2 = System.currentTimeMillis();
-//	Long total = tiempo2 - tiempo1;
-//	if (total == 2000)
-//	System.out.format("el metodo es : %s y el tiempo transcurrido %d\n", punto.getSignature().getName(), total);
-//	 
-//	}
-
 }
