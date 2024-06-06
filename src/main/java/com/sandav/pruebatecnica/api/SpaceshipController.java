@@ -53,12 +53,16 @@ public class SpaceshipController {
 	@Operation(summary = "Upgrade a spaceship entirely")
 	@PutMapping("/")
 	SpaceshipDto update(@RequestBody SpaceshipDto spaceshipDto) {
+		if(spaceshipDto.getId() == null)
+			throw new IllegalArgumentException("Id must not be less than one");
 		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.update(spaceshipMapper.spaceshipDtoToSpaceship(spaceshipDto)));
 	}
 	
 	@Operation(summary = "Delete a spaceship by id")
 	@DeleteMapping("/")
 	void delete(Long id) {
+		if(id == null || id < 1)
+			throw new IllegalArgumentException("Id must not be less than one");
 		spaceshipService.delete(id);
 	}
 	
