@@ -50,6 +50,10 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipRepository.findById(id).get());
 	}
 	
+	public void deleteById(Long id) {
+		spaceshipRepository.deleteById(id);
+	}
+	
 	private List<Spaceship> mapSpaceshipEntityListToSpaceshipList(List<SpaceshipEntity> spaceshipEntityList){
 		List<Spaceship> spaceshipList = new ArrayList<>();
 		

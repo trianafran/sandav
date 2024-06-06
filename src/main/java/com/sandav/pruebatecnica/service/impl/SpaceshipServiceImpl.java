@@ -6,48 +6,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.sandav.pruebatecnica.repository.SpaceshipRepository;
+import com.sandav.pruebatecnica.repository.custom.SpaceshipRepositoryCustom;
 import com.sandav.pruebatecnica.service.SpaceshipService;
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 
 public class SpaceshipServiceImpl implements SpaceshipService {
 	
 	@Autowired
-	public SpaceshipRepository spaceshipRepository;
+	public SpaceshipRepositoryCustom spaceshipRepositoryCustom;
 
 	@Override
 	public List<Spaceship> findAll(Integer page, Integer size) {
 		Pageable paging = PageRequest.of(page, size);
-		spaceshipRepository.findAll(paging);
-		return null;
+		return spaceshipRepositoryCustom.findAll(paging);
 	}
 
 	@Override
 	public List<Spaceship> findByNameContains(String name) {
-		spaceshipRepository.findByNameContains(name);
-		return null;
+		return spaceshipRepositoryCustom.findByNameContains(name);
 	}
 
 	@Override
 	public Spaceship create(Spaceship spaceship) {
-		spaceshipRepository.save(null);
-		return null;
+		return spaceshipRepositoryCustom.create(spaceship);
 	}
 
 	@Override
 	public Spaceship update(Spaceship spaceship) {
-		spaceshipRepository.save(null);
-		return null;
+		return spaceshipRepositoryCustom.update(spaceship);
 	}
 
 	@Override
 	public void delete(Long id) {
-		spaceshipRepository.deleteById(id);
+		spaceshipRepositoryCustom.deleteById(id);
 	}
 
 	@Override
 	public Spaceship findById(Long id) {
-		spaceshipRepository.findById(id);
-		return null;
+		return spaceshipRepositoryCustom.findById(id);
 	}
 }
