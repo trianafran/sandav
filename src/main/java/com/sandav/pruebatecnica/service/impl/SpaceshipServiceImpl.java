@@ -35,11 +35,15 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
 	@Override
 	public Spaceship update(Spaceship spaceship) {
+		if(spaceship.getId() == null)
+			throw new IllegalArgumentException("Id must not be less than one");
 		return spaceshipRepositoryCustom.update(spaceship);
 	}
 
 	@Override
 	public void delete(Long id) {
+		if(id == null || id < 1)
+			throw new IllegalArgumentException("Id must not be less than one.");
 		spaceshipRepositoryCustom.deleteById(id);
 	}
 
