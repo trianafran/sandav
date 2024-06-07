@@ -2,7 +2,7 @@ package com.sandav.pruebatecnica.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 

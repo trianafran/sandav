@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +34,7 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 		List<SpaceshipEntity> spaceshipEntityList = spaceshipRepository.findByNameContains(name);
 		return mapSpaceshipEntityListToSpaceshipList(spaceshipEntityList);
 	}
-
+	
 	@Override
 	public Spaceship create(Spaceship spaceship) {
 		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipEntity(spaceship);
@@ -40,6 +42,7 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipEntity);
 	}
 
+	@CachePut(cacheNames = "spaceship", key="#result.id")
 	@Override
 	public Spaceship update(Spaceship spaceship) {
 		SpaceshipEntity spaceshipEntity = spaceshipMapper.spaceshipToSpaceshipEntity(spaceship);
@@ -47,6 +50,7 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipEntity);
 	}
 
+	@Cacheable(value = "spaceship")
 	@Override
 	public Spaceship findById(Long id) {
 		return spaceshipMapper.spaceshipEntityToSpaceship(spaceshipRepository.findById(id).get());
