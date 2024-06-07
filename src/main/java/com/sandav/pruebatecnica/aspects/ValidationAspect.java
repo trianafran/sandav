@@ -19,7 +19,7 @@ public class ValidationAspect {
 	    Long id = (Long)point.getArgs()[0];	    
 	    if(id<0) {
 	    	logger.warn(String.format("Method: %s. Id must not be negative.", point.getSignature().toString()));
-	    	return null;
+	    	throw new IllegalArgumentException("Id must not be negative");
 	    } else 
 	    	return (Spaceship)point.proceed();
 	}

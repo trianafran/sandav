@@ -31,12 +31,14 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
 	@Override
 	public Spaceship create(Spaceship spaceship) {
+		if(spaceship.getId() != null)
+			throw new IllegalArgumentException("Id must be null");
 		return spaceshipRepositoryCustom.create(spaceship);
 	}
 
 	@Override
 	public Spaceship update(Spaceship spaceship) {
-		if(spaceship.getId() == null)
+		if(spaceship.getId() == null || spaceship.getId() < 1)
 			throw new IllegalArgumentException("Id must not be less than one");
 		return spaceshipRepositoryCustom.update(spaceship);
 	}
@@ -50,6 +52,8 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
 	@Override
 	public Spaceship findById(Long id) {
+		if(id == null || id < 1)
+			throw new IllegalArgumentException("Id must not be less than one");
 		return spaceshipRepositoryCustom.findById(id);
 	}
 }
