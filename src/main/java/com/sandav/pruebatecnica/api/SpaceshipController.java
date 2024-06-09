@@ -68,8 +68,6 @@ public class SpaceshipController {
 			    content = { @Content(mediaType = "application/json", 
 			      schema = @Schema(implementation = SpaceshipDto.class)) }),
 			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
-			    content = @Content), 
-			  @ApiResponse(responseCode = "404", description = "Spaceship not found", 
 			    content = @Content),
 			  @ApiResponse(responseCode = "500", description = "Internal server error", 
 			    content = @Content)})
