@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,11 @@ import com.sandav.pruebatecnica.util.mappings.SpaceshipMapper;
 import com.sandav.pruebatecnica.valueObject.Spaceship;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -32,40 +39,126 @@ public class SpaceshipController {
 	@Autowired
 	SpaceshipMapper spaceshipMapper;
 
-	@Operation(summary = "Get a pageabled list of spaceships")
+	@Operation(summary = "Find a pageabled list of spaceships")
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Found a spaceships paginated list", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content), 
+			  @ApiResponse(responseCode = "404", description = "Spaceships not found", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
 	@GetMapping("/")
-	List<SpaceshipDto> findAll(@RequestParam Integer page,@RequestParam Integer size) {
-		return mapSpaceshipListToSpaceshipDtoList(spaceshipService.findAll(page, size));
+	ResponseEntity<List<SpaceshipDto>> findAll(@Parameter(description = "Page index", example = "0") @RequestParam(required = true) Integer page,@Parameter(description = "Amount of elements by page", example = "20") @RequestParam(required = true) Integer size) {
+		List<SpaceshipDto> spaceshipListDto = mapSpaceshipListToSpaceshipDtoList(spaceshipService.findAll(page, size));;
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if(spaceshipListDto.isEmpty()) {
+			httpStatus = HttpStatus.NOT_FOUND;
+		}  else {
+			httpStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<List<SpaceshipDto>>(spaceshipListDto, httpStatus);
 	}
 	
-	@Operation(summary = "Get a list of spaceships containing the name value")
+	@Operation(summary = "Find a list of spaceships containing the name value")
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Found a list of spaceships containing the name value", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content), 
+			  @ApiResponse(responseCode = "404", description = "Spaceship not found", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
 	@GetMapping("/name/{name}")
-	List<SpaceshipDto> findByNameContains(@PathVariable String name) {
-		return mapSpaceshipListToSpaceshipDtoList(spaceshipService.findByNameContains(name));
+	ResponseEntity<List<SpaceshipDto>> findByNameContains(@Parameter(description = "Name value for search", example="wing") @PathVariable(required = true) String name) {
+		List<SpaceshipDto> spaceshipListDto = mapSpaceshipListToSpaceshipDtoList(spaceshipService.findByNameContains(name));
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if(spaceshipListDto.isEmpty()) {
+			httpStatus = HttpStatus.NOT_FOUND;
+		}  else {
+			httpStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<List<SpaceshipDto>>(spaceshipListDto, httpStatus);
 	}
 	
 	@Operation(summary = "Create a spaceship")
-	@PostMapping("/")
-	SpaceshipDto create(@RequestBody SpaceshipCreateDto spaceshipDto) {
-		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.create(spaceshipMapper.spaceshipCreateDtoToSpaceship(spaceshipDto)));
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Create a spaceship", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
+	@PostMapping("/")	
+	ResponseEntity<SpaceshipDto> create(@Parameter(description = "Spaceship JSON Object to create", example="{\"name\":\"Spaceship test created\", \"speed\":1234567890}") @RequestBody(required = true) SpaceshipCreateDto spaceshipCreateDto) {
+		SpaceshipDto spaceshipDto= spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.create(spaceshipMapper.spaceshipCreateDtoToSpaceship(spaceshipCreateDto)));
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if(spaceshipDto != null && spaceshipDto.getId() != null) {
+			httpStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<SpaceshipDto>(spaceshipDto, httpStatus);
 	}
 	
 	@Operation(summary = "Upgrade a spaceship entirely")
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Update a spaceship", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
 	@PutMapping("/")
-	SpaceshipDto update(@RequestBody SpaceshipDto spaceshipDto) {
-		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.update(spaceshipMapper.spaceshipDtoToSpaceship(spaceshipDto)));
+	ResponseEntity<SpaceshipDto> update(@Parameter(description = "Spaceship JSON Object to update", example="{\"id\" : 1, \"name\":\"Spaceship test updated\", \"speed\": 0987654321}") @RequestBody(required = true) SpaceshipDto spaceshipUpdateDto) {
+		SpaceshipDto spaceshipDto = spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.update(spaceshipMapper.spaceshipDtoToSpaceship(spaceshipUpdateDto))); 
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if(spaceshipDto != null && spaceshipDto.getId() != null) {
+			httpStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<SpaceshipDto>(spaceshipDto, httpStatus);
 	}
 	
 	@Operation(summary = "Delete a spaceship by id")
-	@DeleteMapping("/")
-	void delete(Long id) {
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Delete a spaceships by ID", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content), 
+			  @ApiResponse(responseCode = "404", description = "Spaceship not found", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
+	@DeleteMapping("/id/{id}")
+	ResponseEntity<Object> delete(@Parameter(description = "Spaceship ID to delete", example="1") @PathVariable(required = true) Long id) {
 		spaceshipService.delete(id);
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
-	@Operation(summary = "Get a spaceship by id")
+	@Operation(summary = "Find a spaceship by id")
+	@ApiResponses(value = { 
+			  @ApiResponse(responseCode = "200", description = "Found a spaceships by ID", 
+			    content = { @Content(mediaType = "application/json", 
+			      schema = @Schema(implementation = SpaceshipDto.class)) }),
+			  @ApiResponse(responseCode = "400", description = "Invalid data supplied", 
+			    content = @Content), 
+			  @ApiResponse(responseCode = "404", description = "Spaceship not found", 
+			    content = @Content),
+			  @ApiResponse(responseCode = "500", description = "Internal server error", 
+			    content = @Content)})
 	@GetMapping("/id/{id}")
-	SpaceshipDto findById(@PathVariable Long id) {
-		return spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.findById(id));
+	ResponseEntity<SpaceshipDto> findById(@Parameter(description = "Spaceship ID", example="1") @PathVariable(required = true) Long id) {
+		SpaceshipDto spaceshipDto = spaceshipMapper.spaceshipToSpaceshipDto(spaceshipService.findById(id));
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if(spaceshipDto != null && spaceshipDto.getId() != null) {
+			httpStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<>(spaceshipDto, httpStatus);
 	}
 	
 	private List<SpaceshipDto> mapSpaceshipListToSpaceshipDtoList(List<Spaceship> spaceshipList){

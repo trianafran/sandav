@@ -1,6 +1,7 @@
 package com.sandav.pruebatecnica.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -47,6 +48,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 	public void delete(Long id) {
 		if(id == null || id < 1)
 			throw new IllegalArgumentException("Id must not be less than one.");
+		spaceshipRepositoryCustom.findById(id);
 		spaceshipRepositoryCustom.deleteById(id);
 	}
 

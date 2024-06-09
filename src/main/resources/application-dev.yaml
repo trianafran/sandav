@@ -16,3 +16,7 @@ spring:
   cache:
     type: caffeine
     #type: none #Disable cache
+springdoc:
+  swagger-ui:
+    path: "/swagger"
+    operationsSorter: "method"

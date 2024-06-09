@@ -13,5 +13,5 @@ import com.sandav.pruebatecnica.domain.SpaceshipEntity;
 @Repository
 public interface SpaceshipRepository extends CrudRepository<SpaceshipEntity, Long> {
 	Page<SpaceshipEntity> findAll(Pageable pageable);
-	List<SpaceshipEntity> findByNameContains(String name);
+	List<SpaceshipEntity> findByNameContainsIgnoreCase(String name);
 }

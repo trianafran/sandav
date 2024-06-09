@@ -11,9 +11,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 
-    @ExceptionHandler({NoSuchElementException.class, IllegalArgumentException.class})
+    @ExceptionHandler({IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleWrongData(RuntimeException ex) {
-        return new ResponseEntity<>("Wrong data entered. Exception ERROR: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("Wrong data entered. Exception ERROR: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler({NoSuchElementException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleNotFoundElementData(RuntimeException ex) {
+        return new ResponseEntity<String>("Element not found. Exception ERROR: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

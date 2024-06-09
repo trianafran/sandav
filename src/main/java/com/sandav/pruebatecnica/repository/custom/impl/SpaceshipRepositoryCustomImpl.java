@@ -31,7 +31,7 @@ public class SpaceshipRepositoryCustomImpl implements SpaceshipRepositoryCustom{
 
 	@Override
 	public List<Spaceship> findByNameContains(String name) {
-		List<SpaceshipEntity> spaceshipEntityList = spaceshipRepository.findByNameContains(name);
+		List<SpaceshipEntity> spaceshipEntityList = spaceshipRepository.findByNameContainsIgnoreCase(name);
 		return mapSpaceshipEntityListToSpaceshipList(spaceshipEntityList);
 	}
 	
