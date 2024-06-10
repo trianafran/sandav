@@ -16,6 +16,14 @@ spring:
   cache:
     type: caffeine
     #type: none #Disable cache
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer:
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+    listener:
+      ack-mode: manual
+      auto-startup: false
 springdoc:
   swagger-ui:
     path: "/swagger"
